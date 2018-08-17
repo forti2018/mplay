@@ -134,7 +134,39 @@ color: #fff;
       a{
         text-decoration: none;
         color: #FFF;
+      }
 
+      .cvid_titulo {
+        font-size: 16px !important;
+        color: #000000;
+        font-family: Helvetica,Futura,Arial,Verdana,sans-serif;
+        font-weight: bold;
+        text-align: left;
+      }
+
+      .cvid_autor {
+        font-size: 12px !important;
+        font-family:'Roboto', sans-serif;
+        color: #888;
+        font-weight: bold;
+        text-align: left;
+      }
+
+      .cvid_fecha {
+        font-size: 12px !important;
+        font-family: Monaco,Georgia,Times,serif;
+        color: #f12626;
+        font-weight: bold;
+        text-align: left;
+      }
+
+      .cvid_visitas {
+        font-size: 10px !important;
+        font-family:'Helvetica','Verdana','Monaco',sans-serif;
+        color: #888;
+        font-weight: bold;
+        text-align: left;
+        font-style: italic;
       }
 
 

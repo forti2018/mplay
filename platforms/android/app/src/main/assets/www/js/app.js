@@ -34,8 +34,10 @@ var app = {
     password2:"",
     usuario_profile: "",
     hostname: "http://www.oronoticias.org",
-    urlVideo: "",
-    tituloVideo: "",
+    //hostname: "http://localhost",
+    //urlVideo: "",
+    //tituloVideo: "",
+    idVideo: "",
 
     // Application Constructor
     initialize: function() {
@@ -124,7 +126,7 @@ var app = {
 
     }, //Fin de la funcion loginAccess
     
-    //++++++++ FUNCION PARA ENTRAR A LA VISTA DE REGISTGRO +++++++++++++++
+    //++++++++ FUNCION PARA ENTRAR A LA VISTA DE REGISTRO +++++++++++++++
     RegisterAccess:function(){
       app7.panel.close(); //Cerrar el panel
       mainView.router.navigate('/register/',{animate:true});
@@ -354,8 +356,8 @@ function getVideos() {
             for (f in objson.data){
                 //console.log(objson.data[f].titulo);
                 img = app.hostname+'/mplay/img/'+objson.data[f].imagen;
-                //img = objson.data[f].imagen;
-                video = '<div class="item"><div class="post"><img src="'+img+'" onClick="goVideo(\''+objson.data[f].titulo+'\',\''+objson.data[f].urlvideo+'\')"><div class="time">'+objson.data[f].duracion+'</div></div><h5>'+objson.data[f].titulo+'</h5><p>'+objson.data[f].autor+'</p><p>'+objson.data[f].visitas+' Visitas | '+objson.data[f].fecha+'</p></div>';
+                //video = '<div class="item"><div class="post"><img src="'+img+'" onClick="goVideo(\''+objson.data[f].titulo+'\',\''+objson.data[f].urlvideo+'\')"><div class="time">'+objson.data[f].duracion+'</div></div><h5>'+objson.data[f].titulo+'</h5><p>'+objson.data[f].autor+'</p><p>'+objson.data[f].visitas+' Visitas | '+objson.data[f].fecha+'</p></div>';
+                video = '<div class="item"><div class="post"><img src="'+img+'" onClick="goVideo(\''+objson.data[f].id+'\')"><div class="time">'+objson.data[f].duracion+'</div></div><h5>'+objson.data[f].titulo+'</h5><p>'+objson.data[f].autor+'</p><p>'+objson.data[f].visitas+' Visitas | '+objson.data[f].fecha+'</p></div>';
                 $$('#content-videos').append(video);
 
             }
@@ -391,8 +393,7 @@ function refreshVideos(){
             for (f in objson.data){
                 //console.log(objson.data[f].titulo);
                 img = app.hostname+'/mplay/img/'+objson.data[f].imagen;
-                //img = objson.data[f].imagen;
-                video = '<div class="item"><div class="post"><img src="'+img+'"><div class="time">'+objson.data[f].duracion+'</div></div><h5>'+objson.data[f].titulo+'</h5><p>'+objson.data[f].autor+'</p><p>'+objson.data[f].visitas+' Visitas | '+objson.data[f].fecha+'</p></div>';
+                video = '<div class="item"><div class="post"><img src="'+img+'" onClick="goVideo(\''+objson.data[f].id+'\')"><div class="time">'+objson.data[f].duracion+'</div></div><h5>'+objson.data[f].titulo+'</h5><p>'+objson.data[f].autor+'</p><p>'+objson.data[f].visitas+' Visitas | '+objson.data[f].fecha+'</p></div>';
                 $$('#content-videos').append(video);
 
             }
@@ -429,7 +430,8 @@ function getSlider() {
 
             for (f in objson.data){
                 console.log(objson.data[f].titulo);
-                var slide = '<div class="swiper-slide"><div class="slider"><div class="mask"></div><img src="img/'+objson.data[f].imagen+'" /><div class="caption"><h2>'+objson.data[f].titulo+'</h2><p>'+objson.data[f].fecha+'</p><button>Play Now</button></div></div></div>';
+                var img = app.hostname+'/mplay/img/'+objson.data[f].imagen;
+                var slide = '<div class="swiper-slide"><div class="slider"><div class="mask"></div><img src="'+img+'" /><div class="caption"><h2>'+objson.data[f].titulo+'</h2><p>'+objson.data[f].fecha+'</p><button>Play Now</button></div></div></div>';
                 swiper.appendSlide(slide);
             }
             //console.log(data);
@@ -445,19 +447,72 @@ function getSlider() {
 }//Fin de la funcion getSlider
 
 //+++++++++++ FUNCION PARA IR AL DETALLE DEL VIDEO ++++++++++++++++
-function goVideo(titulo,url){
+/*function goVideo(titulo,url){
   app.tituloVideo = titulo;
   app.urlVideo = url;
   mainView.router.navigate('/video/',{animate:true});
-}
+}*/
 
+//+++++++++++ FUNCION PARA IR AL DETALLE DEL VIDEO ++++++++++++++++
+function goVideo(id){
+  app.idVideo = id;
+  mainView.router.navigate('/video/',{animate:true});
+}//Fin de goVideo
 
-//Este tipo de funciones se van a ejecutar cada vez que entremos a una vista
+//+++++++++++ FUNCION PARA DESPLEGAR EL DETALLE DEL VIDEO ++++++++++++++++
+function detalleVideo(id){
+   var id = id;
+
+        //$$('#DetalleVideo').html(""); //Para limpiar y traer los nuevos datos
+
+        app7.preloader.show(); //Poner cargador para simular que esta cargando datos
+        
+        app7.request({
+          url:app.hostname+'/mplay/api/detalleVideo.php?id='+id,
+          method:'GET',
+
+          crossDomain: true,
+
+          success: function(data){
+            app7.preloader.hide(); //Si responde bien ocultamos el cargador
+            
+            var objson = JSON.parse(data);
+            var video = "";
+
+            if (objson.data == "NO_ENCONTRADO"){
+              video = "VIDEO NO ENCONTRADO";
+              $$('#titulo').append(video);
+              //app7.dialog.alert("No se encontraron resultados");
+            }else {
+
+            for (f in objson.data){
+                console.log(objson.data[f].titulo);
+                $$('.videoyoutube iframe').remove();
+                $$('<iframe width="100%" height="200"  frameborder="0" allowfullscreen>').attr('src',objson.data[f].urlvideo).appendTo('.videoyoutube');
+                //video = objson.data[f].titulo;
+                $$('#titulo').append(objson.data[f].titulo);
+                $$('#autor').append('Por: '+objson.data[f].autor);
+                $$('#fecha').append(objson.data[f].fecha);
+                $$('#visitas').append(objson.data[f].visitas+' visitas');
+            }//Fin del For
+          }//Fin del Else
+            //console.log(data);
+            
+          },//Fin del success
+
+          error:function(error) {
+            app7.preloader.hide(); //Si existe error ocultamos el cargador
+            app7.dialog.alert('Hubo un error por favor intenta nuevamente'); 
+            console.log(data);
+          }//Fin del error
+        });//Fin del app7.request 
+}//Fin de la Funcion DetalleVideo
+
+//+++++++++++ FUNCION QUE SE EJECUTA CUANDO SE ENTRA A LA VISTA DEL DETALLE DEL VIDEO ++++++++++++++++
 $$(document).on('page:init', '.page[data-name="video"]', function (e) { 
-
-  console.log(app.urlVideo);
-  $$()
-  $$('.videoyoutube iframe').remove();
-  $$('<iframe width="100%" height="200"  frameborder="0" allowfullscreen>').attr('src',app.urlVideo).appendTo('.videoyoutube');
+  detalleVideo(app.idVideo);
+  //console.log(app.urlVideo);
+  //$$('.videoyoutube iframe').remove();
+  //$$('<iframe width="100%" height="200"  frameborder="0" allowfullscreen>').attr('src',app.urlVideo).appendTo('.videoyoutube');
 
 }); //FIn de $$document init-video
