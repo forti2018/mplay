@@ -77,7 +77,35 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);*/
-    },
+        //Cuando se inicializa el dispositivo y se 
+        var push = PushNotification.init({
+            android: {
+            },
+           
+            ios: {
+                alert: "true",
+                badge: "true",
+                sound: "true"
+            }
+        });
+
+        //Se obtiene o se registra el Token
+        push.on('registration', function(data) {
+            document.getElementById("token").value = data.registrationId;
+            console.log(data.registrationId);
+            console.log(data.registrationType);
+        });
+
+        //Escribir o mostrar la notificacion
+        push.on('notification', function(data) {
+            console.log(data.message);
+            console.log(data.title);
+            console.log(data.count);
+            console.log(data.sound);
+            console.log(data.image);
+            console.log(data.additionalData);
+        });//Fin del Push ON
+    },//Fin del receivedEvent
 
     //++++++++ FUNCION PARA VERIFICAR USER Y PASSWORD Y LOGUEARSE A LA BD +++++++++++++++
     loginAccess:function(){

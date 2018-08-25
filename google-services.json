@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "51366970729",
+    "firebase_url": "https://mplay-f5285.firebaseio.com",
+    "project_id": "mplay-f5285",
+    "storage_bucket": "mplay-f5285.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51366970729:android:daf1bab6480ba08e",
+        "android_client_info": {
+          "package_name": "com.mplay.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51366970729-cjv5diqus3si1vskv4depmabcb7fm44h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEPBVxNtTFRqT7b3Hzuw2HePlveMYqtcs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
